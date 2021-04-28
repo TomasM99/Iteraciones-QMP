@@ -29,6 +29,10 @@ enum Categoria {
   PARTE_SUPERIOR, PARTE_INFERIOR, CALZADO, ACCESORIOS
 }
 
+enum Material {
+  //materiales
+}
+
 class Tipo {
   var nombreTipo;
   var categoria;
@@ -65,13 +69,8 @@ class Atuendo {
 }
 
 
-ACLARACIONES:
+ACLARACIONES: (primeara iteracion)
 Decido hacer un constructor en el que se validan que no sean nulos los atributos que si o si tienen que estar.
 Agrego una validacion tambien para el ultimo requerimiento (nose si esta bien planteado), me fijo que sean iguales
 tanto la categoria en la prenda, como la categoria en el tipo de la prenda.
-Para el caso del color secundario que es opcional lo agrego mediante un setter.
-
-ACLARACIONES DE CLASE:
-El tipo de prenda y el material los codificaron con enums. El color esta modelado como una clase
-para que podamos poner los valores del calor en rgb. En java existe checkNotNull(), sino codificarla.
-Para el color secundario se puede sobrecargar el constructor.
+Para el caso del color secundario que es opcional lo agrego mediante un setter. (se puede sobrecargar el constructor).
