@@ -2,11 +2,15 @@ class Prenda {
   var tipoPrenda;
   var categoria;
   var material;
+  var trama;
   var colorPrincipal;
   var colorSecundario;
   
-    constructor(tipoPrenda,categoria,material,colorPrincipal){
+    constructor(tipoPrenda,material,colorPrincipal,trama,categoria){
       
+      //Segundo requerimiento pidiendo que primero se especifique el tipo de la prenda
+      //Tambien se elige en segunda lugar lo relacionado en cuanto al material
+
       Validador.queNoSeaNulo(tipoPrenda,"Falta Tipo");
       Validador.queNoSeaNulo(categoria, "Falta Categoria");
       Validador.queNoSeaNulo(material, "Falta Material");
@@ -15,9 +19,10 @@ class Prenda {
       Validador.categoriaCondiceConTipo(categoria, tipoPrenda, "No se condice la categoria con su tipo");
       
       this.tipoPrenda = tipoPrenda;
-      this.categoria = categoria;
       this.material = material;
       this.colorPrincipal = colorPrincipal;
+      this.trama = trama;
+      this.categoria = categoria;
     }
     
     method setColorSecundario(color){
@@ -31,6 +36,10 @@ enum Categoria {
 
 enum Material {
   //materiales
+}
+
+enum Trama {
+  LISA, RAYADA, CON_LUNARES, A_CUADROS, ESTAMPADA
 }
 
 class Tipo {
@@ -68,9 +77,62 @@ class Atuendo {
   var prendas = [];
 }
 
+//Agrego clase para tener estados intermedios de la prenda
 
-ACLARACIONES: (primeara iteracion)
+class Borrador {
+  var tipoPrenda;
+  var categoria;
+  var material;
+  var colorPrincipal;
+  var colorSecundario;
+  var trama = LISA; //requerimiento en que si no indico nada queda la trama LISA
+
+    method construirPrenda() {
+      prenda = new Prenda(tipoPrenda,material,colorPrincipal,trama,categoria);
+
+      if (colorSecundario != NULL){
+      prenda.setColorSecundario(colorSecundario);
+    }
+
+      return prenda;
+  }
+
+
+    method setTipoPrenda(tipo){
+      this.tipoPrenda = tipo;
+  }
+
+    method setCategoria(categoria){
+      this.categoria = categoria;
+  }
+
+    method setMaterial(material){
+      this.material = material;
+  }
+
+    method setColorPrincipal(colorP){
+      this.colorPrincipal = colorP;
+  }
+
+    method setColorSegundario(colorS){
+      this.colorSecundario = colorS;
+  }
+
+    method setTrama(trama){
+      this.trama = trama;
+  }
+
+}
+
+
+ACLARACIONES: (primera iteracion)
 Decido hacer un constructor en el que se validan que no sean nulos los atributos que si o si tienen que estar.
 Agrego una validacion tambien para el ultimo requerimiento (nose si esta bien planteado), me fijo que sean iguales
 tanto la categoria en la prenda, como la categoria en el tipo de la prenda.
 Para el caso del color secundario que es opcional lo agrego mediante un setter. (se puede sobrecargar el constructor).
+
+
+ACLARACIONES: (segunda iteracion)
+Decido hacer una clase borrador como piden en el requermiento que se puede ir completando a medida que nosotros
+queramos, y llamamos a construir cuando ya decidamos que sea la prenda final. Las validaciones las dejo en el
+constructor de la prenda. De esta forma solo podremos de vuelta construir una prenda siempre y cuando se valida.
