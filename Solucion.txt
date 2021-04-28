@@ -207,3 +207,5 @@ queramos, y llamamos a construir cuando ya decidamos que sea la prenda final. La
 constructor de la prenda. De esta forma solo podremos de vuelta construir una prenda siempre y cuando se valida.
 Para el caso de los uniformes hice un intento de lo que creo que es el patron Factory Method. Creo la clase abstracta
 y de ella heredan las que saben como armar cada uniforme de cada institucion.
+Queda pendiente el diagrama de clases ya que tengo dudas de como hacerlo teniendo en cuenta que quise implementar un 
+factory method mas la clase borrador.
