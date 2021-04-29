@@ -35,7 +35,7 @@ enum Categoria {
 }
 
 enum Material {
-  PIQUE
+  PIQUE, ALGODON, LANA //puede haber abstraccion material que incluya tmb la trama y/o color
 }
 
 enum Trama {
@@ -77,7 +77,8 @@ class Atuendo {
   var prendas = [];
 }
 
-//Agrego clase para tener estados intermedios de la prenda
+//Agrego clase para tener estados intermedios de la prenda, especie de builder, como desventaja es el acoplamiento
+//y el tener que repetir los atributos de prenda dentro de borrador (a veces repetir validaciones)
 
 class Borrador {
   var tipoPrenda;
@@ -85,10 +86,12 @@ class Borrador {
   var material;
   var colorPrincipal;
   var colorSecundario;
-  var trama = LISA; //requerimiento en que si no indico nada queda la trama LISA
+  var trama = Trama.LISA; //requerimiento en que si no indico nada queda la trama LISA
 
     method construirPrenda() {
       prenda = new Prenda(tipoPrenda,material,colorPrincipal,trama,categoria);
+
+      //validar que la prenda sea valida con prenda.esValida()
 
       if (colorSecundario != NULL){
       prenda.setColorSecundario(colorSecundario);
@@ -97,8 +100,7 @@ class Borrador {
       return prenda;
   }
 
-
-    method setTipoPrenda(tipo){
+    method setTipoPrenda(tipo){ //Se pueden agregar validaciones en cada set o especificar
       this.tipoPrenda = tipo;
   }
 
@@ -145,7 +147,7 @@ abstract class CreadorUniformes {
     new Uniforme(this.crearParteSuperior(), this.crearParteInferior, this.crearCalzado)
   }
 
-  abstract method crearParteSuperior();
+  abstract method crearParteSuperior();  //cada uno de estos es un Factory Method
   abstract method crearParteInferior();
   abstract method crearCalzado();
 }
