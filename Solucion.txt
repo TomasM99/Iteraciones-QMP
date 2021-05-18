@@ -5,28 +5,28 @@ class Prenda {
   var trama;
   var colorPrincipal;
   var colorSecundario;
+  var temperaturaMaxima
   
-    constructor(tipoPrenda,material,colorPrincipal,trama,categoria){
-      
-      //Segundo requerimiento pidiendo que primero se especifique el tipo de la prenda
-      //Tambien se elige en segunda lugar lo relacionado en cuanto al material
-
-      Validador.queNoSeaNulo(tipoPrenda,"Falta Tipo");
-      Validador.queNoSeaNulo(categoria, "Falta Categoria");
-      Validador.queNoSeaNulo(material, "Falta Material");
-      Validador.queNoSeaNulo(colorPrincipal, "Falta Color Principal");
-      // aca podemos aplicar checkNotNull(valor,mensaje)
-      Validador.categoriaCondiceConTipo(categoria, tipoPrenda, "No se condice la categoria con su tipo");
+    constructor(tipoPrenda,material,colorPrincipal,trama,categoria,temperaturaMaxima){
       
       this.tipoPrenda = tipoPrenda;
       this.material = material;
       this.colorPrincipal = colorPrincipal;
       this.trama = trama;
       this.categoria = categoria;
+      this.temperaturaMaxima = temperaturaMaxima;
     }
     
     method setColorSecundario(color){
       colorSecundario = color;
+    }
+
+    method esValida(){
+    Validador.queNoSeaNulo(tipoPrenda,"Falta Tipo");
+    Validador.queNoSeaNulo(categoria, "Falta Categoria");
+    Validador.queNoSeaNulo(material, "Falta Material");
+    Validador.queNoSeaNulo(colorPrincipal, "Falta Color Principal");
+    Validador.categoriaCondiceConTipo(categoria, tipoPrenda, "No se condice la categoria con su tipo");
     }
 }
 
@@ -87,11 +87,12 @@ class Borrador {
   var colorPrincipal;
   var colorSecundario;
   var trama = Trama.LISA; //requerimiento en que si no indico nada queda la trama LISA
+  var temperaturaMaxima;
 
     method construirPrenda() {
-      prenda = new Prenda(tipoPrenda,material,colorPrincipal,trama,categoria);
+      prenda = new Prenda(tipoPrenda,material,colorPrincipal,trama,categoria,temperaturaMaxima);
 
-      //validar que la prenda sea valida con prenda.esValida()
+      prenda.esValida();
 
       if (colorSecundario != NULL){
       prenda.setColorSecundario(colorSecundario);
@@ -211,3 +212,6 @@ Para el caso de los uniformes hice un intento de lo que creo que es el patron Fa
 y de ella heredan las que saben como armar cada uniforme de cada institucion.
 Queda pendiente el diagrama de clases ya que tengo dudas de como hacerlo teniendo en cuenta que quise implementar un 
 factory method mas la clase borrador.
+
+
+ACLARACIONES: (cuarta iteracion)
