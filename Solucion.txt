@@ -71,6 +71,18 @@ class Validador{
     }
     
   }
+
+  method validarCategoriaAtuendo(prenda, enum,exepcion){
+    if(prenda.getCategoria() != enum){
+      throw new Exepcion(exepcion)
+    }
+  }
+
+  method temperaturaAcorde(prenda,temperatura){
+    if(prenda.getTemperaturaMaxima() < temperatura){
+      throw new Exepcion("La temperatura execede la permitida por la prenda")
+    }
+  }
 }
 
 class Atuendo {
@@ -78,22 +90,51 @@ class Atuendo {
   var parteSuperior;
   var calzado;
   var accesorio;
+  ArrayList<Prenda> prendasExtra;
 
   constructor(parteInferior,parteSuperior,calzado,accesorio) {
+
+    Validador.validarCategoriaAtuendo(parteInferior, PARTE_INFERIOR, "No es una parte inferior");
+    Validador.validarCategoriaAtuendo(parteSuperior, PARTE_SUPERIOR, "No es una parte superior");
+    Validador.validarCategoriaAtuendo(calzado, CALZADO, "No es un calzado");
+    Validador.validarCategoriaAtuendo(accesorio, ACCESORIOS, "No es un accesorio");
+
     this.parteInferior = parteInferior;
     this.parteSuperior = parteSuperior;
     this.calzado = calzado;
     this.accesorio = accesorio;
   }
 
+  method agregarPrendaExtra(prenda) {
+    this.prendasExtra.add(prenda);
+  }
+
+}
+
+class Sugerencia {
+  var parteInferior;
+  var parteSuperior;
+  var calzado;
+  var accesorio;
+
+  method construirSugerencia() {
+    atuendo = new Atuendo(parteInferior, parteSuperior, calzado, accesorio);
+    temperatura = condicionesClimaticasBuenosAires.conocerTemperaturaActual();
+
+    Validador.temperaturaAcorde(parteInferior,temperatura);
+    Validador.temperaturaAcorde(parteSuperior,temperatura);
+    Validador.temperaturaAcorde(calzado,temperatura);
+    Validador.temperaturaAcorde(accesorio,temperatura);
+  }
+
 }
 
 class Usuario {
 
-  method recibirSugerencia() {
-    temperaturaActual = condicionesClimaticas.conocerCiertaCondicionClimatica("Temperatura");
+  ArrayList<Atuendo> atuendosRecomendados;
 
-    
+  method recibirSugerencia(atuendo) {
+    this.atuendosRecomendados.add(atuendo);
   }
 
 }
@@ -217,12 +258,20 @@ class colegioJohnson inherits CreadorUniformes {
   }
 }
 
-class condicionesClimaticas {
+class condicionesClimaticasBuenosAires implements AccuWeatherAPI {
   AccuWeatherAPI apiClima = new AccuWeatherAPI();
   List<Map<String,Object>> condicionesClimaticas = apiClima.getWeather("Buenos Aires, Argentina");
 
   method conocerCiertaCondicionClimatica(condicion) {
     this.condicionesClimaticas.get(0).get(condicion);
+  }
+
+  method condicionesClimaticasBuenosAires() {
+    return condicionesClimaticas;
+  }
+
+  method conocerTemperaturaActual() {
+    this.condicionesClimaticas.get(0).get("Temperature");
   }
 }
 
