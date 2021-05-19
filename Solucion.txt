@@ -125,6 +125,8 @@ class Sugerencia {
     Validador.temperaturaAcorde(parteSuperior,temperatura);
     Validador.temperaturaAcorde(calzado,temperatura);
     Validador.temperaturaAcorde(accesorio,temperatura);
+
+    return atuendo;
   }
 
 }
