@@ -74,7 +74,28 @@ class Validador{
 }
 
 class Atuendo {
-  var prendas = [];
+  var parteInferior;
+  var parteSuperior;
+  var calzado;
+  var accesorio;
+
+  constructor(parteInferior,parteSuperior,calzado,accesorio) {
+    this.parteInferior = parteInferior;
+    this.parteSuperior = parteSuperior;
+    this.calzado = calzado;
+    this.accesorio = accesorio;
+  }
+
+}
+
+class Usuario {
+
+  method recibirSugerencia() {
+    temperaturaActual = condicionesClimaticas.conocerCiertaCondicionClimatica("Temperatura");
+
+    
+  }
+
 }
 
 //Agrego clase para tener estados intermedios de la prenda, especie de builder, como desventaja es el acoplamiento
@@ -196,6 +217,15 @@ class colegioJohnson inherits CreadorUniformes {
   }
 }
 
+class condicionesClimaticas {
+  AccuWeatherAPI apiClima = new AccuWeatherAPI();
+  List<Map<String,Object>> condicionesClimaticas = apiClima.getWeather("Buenos Aires, Argentina");
+
+  method conocerCiertaCondicionClimatica(condicion) {
+    this.condicionesClimaticas.get(0).get(condicion);
+  }
+}
+
 
 ACLARACIONES: (primera iteracion)
 Decido hacer un constructor en el que se validan que no sean nulos los atributos que si o si tienen que estar.
@@ -215,3 +245,7 @@ factory method mas la clase borrador.
 
 
 ACLARACIONES: (cuarta iteracion)
+Hago una clase para la parte de la API de las condiciones del clima ya que no se bien como se termina de usar y donde usarlo.
+Agrego la temperatura en cada prenda para que sea valida y que cada atuendo tenga si o si 4 prendas como variables.
+La parte del administrador supuse que seria nomas cambiar la API que estemos usando en el momento, y habria que hacer una cantidad
+maxima de preguntas hacia la API por dia para evitar que sea tan costoso su uso.
