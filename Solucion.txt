@@ -169,6 +169,12 @@ class Usuario {
     modificacion.getGuardarropas().remove(modificacion);
   }
 
+  method deshacerModificacion(modificacion){
+    if(modificacion.fueAplicada()){
+      modificacion.deshacerModificacion();
+    }
+  }
+
 
 
 }
