@@ -134,12 +134,52 @@ class Sugerencia {
 class Usuario {
 
   ArrayList<Atuendo> atuendosRecomendados;
+  ArrayList<GuardaRropa> misGuardaRropas;
 
   method recibirSugerencia(atuendo) {
     this.atuendosRecomendados.add(atuendo);
   }
 
+  method crearGuardaRopasCompartido(ArrayList<Usuario> usuarios, criterio, prendas) {
+    nuestroGuardarropa = new GuardaRropa(criterio, prendas);
+    this.agregarGuardaRropas(nuestroGuardarropa);
+    usuarios.map(usuario -> usuario.agregarGuardaRropas(nuestroGuardarropa));
+  }
+
+  method agregarGuardaRropas(guardaRropas) {
+    this.misGuardaRropas.add(guardaRropas);
+  }
+
 }
+
+class GuardaRropa {
+
+  var criterio;
+  ArrayList<Prenda> prendas;
+
+  constructor(criterio, prendas) {
+    this.criterio = criterio;
+    this.prendas = prendas;
+  }
+
+  method agregarPrenda(Prenda prenda){
+    this.prendas.add(prenda);
+  }
+
+}
+
+enum Criterio {
+  ROPA_VIAJE, ROPA_CASA, ROPA_DEPORTIVA, ROPA_SALIR // pueden agregarse tantas categorias como queramos
+}
+
+
+
+
+
+
+
+
+
 
 //Agrego clase para tener estados intermedios de la prenda, especie de builder, como desventaja es el acoplamiento
 //y el tener que repetir los atributos de prenda dentro de borrador (a veces repetir validaciones)
@@ -260,21 +300,26 @@ class colegioJohnson inherits CreadorUniformes {
   }
 }
 
-class condicionesClimaticasBuenosAires implements AccuWeatherAPI {
-  AccuWeatherAPI apiClima = new AccuWeatherAPI();
-  List<Map<String,Object>> condicionesClimaticas = apiClima.getWeather("Buenos Aires, Argentina");
+interface ServicioMeteorologico {
 
-  method conocerCiertaCondicionClimatica(condicion) {
-    this.condicionesClimaticas.get(0).get(condicion);
-  }
+  EstadoDelTiempo obtenerCondicionesClimaticas(String direccion);
+}
 
-  method condicionesClimaticasBuenosAires() {
-    return condicionesClimaticas;
-  }
+Class ServicioMeteorologicoAccuWeather implements ServicioMeteorologico
+{
 
-  method conocerTemperaturaActual() {
-    this.condicionesClimaticas.get(0).get("Temperature");
-  }
+private Map<String, RespuestaMeteorologica> ultimasRespuestas;
+public ServicioMeteorologico(AccuWeatherAPI api, Duration periodoDeValidez) { 
+   this.api = api;
+   this.periodoDeValidez = periodoDeValidez;
+   this.ultimasRespuestas = new HashMap<String, Object>();
+ }
+
+ public EstadoDelTiempo obtenerCondicionesClimaticas(String direccion) {
+   if (!this.ultimasRespuestas.contains(direccion) || this.ultimasRespuestas.get(direccion).expiro()) {
+    ultimasRespuestas.put(new RespuestaMeteorologica(consultarApi(direccion), proximaExpiracion()));
+   }
+   return this.ultimasRespuestas.get(direccion).getEstadoDelTiempo();
 }
 
 
@@ -299,4 +344,9 @@ ACLARACIONES: (cuarta iteracion)
 Hago una clase para la parte de la API de las condiciones del clima ya que no se bien como se termina de usar y donde usarlo.
 Agrego la temperatura en cada prenda para que sea valida y que cada atuendo tenga si o si 4 prendas como variables.
 La parte del administrador supuse que seria nomas cambiar la API que estemos usando en el momento, y habria que hacer una cantidad
-maxima de preguntas hacia la API por dia para evitar que sea tan costoso su uso.
+maxima de preguntas hacia la API por dia para evitar que sea tan costoso su uso. (Uso de impostores para el tema de que no sea tan caro)
+
+ACLARACIONES: (quinta iteracion)
+Teniendo en cuenta el requerimiento de que se puede separar por criterios a los guardarropas, lo que hago es solamente poner el criterio
+en la clase guardaRropas, de esta forma el usuario decide que prendas poner y que no, toda prenda que decida poner en ese guardarropas se 
+considera de ese criterio. Para lso compartidos hago una referencia al mismo objeto.
