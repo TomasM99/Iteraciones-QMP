@@ -150,12 +150,34 @@ class Usuario {
     this.misGuardaRropas.add(guardaRropas);
   }
 
+  method recibirPropuestaModificacion(modificacion){
+    modificacion.getGuardarropas().agregarModificacion(modificacion);
+  }
+
+  method propuestasModificacion() {
+    this.misGuardaRropas.getModificaciones();
+  }
+
+  method aceptarModificacion(modificacion){
+    if(!modificacion.fueAplicada()){
+      modificacion.aplicarModificacion()
+    }
+    throw new Exepcion("La modificacion ya fue aplicada");
+  }
+
+  method rechazarModificacion(modificacion){
+    modificacion.getGuardarropas().remove(modificacion);
+  }
+
+
+
 }
 
 class GuardaRropa {
 
   var criterio;
   ArrayList<Prenda> prendas;
+  ArrayList<Modificacion> modificaciones;
 
   constructor(criterio, prendas) {
     this.criterio = criterio;
@@ -166,18 +188,57 @@ class GuardaRropa {
     this.prendas.add(prenda);
   }
 
+  method quitarPrenda(Prenda prenda){
+    this.prendas.remove(prenda);
+  }
+
+  method agregarModificacion(Modificacion modificacion){
+    this.modificaciones.add(modificacion);
+  }
+
 }
 
 enum Criterio {
   ROPA_VIAJE, ROPA_CASA, ROPA_DEPORTIVA, ROPA_SALIR // pueden agregarse tantas categorias como queramos
 }
 
+abstract class Modificacion {
+  var prenda;
+  var guardaRropas;
+  var fueAplicada = false;
 
+  abstract method aplicarModificacion();
+  abstract method deshacerModificacion();
 
+}
 
+class AgregarPrenda extends Modificacion {
 
+  method aplicarModificacion(){
+    this.guardaRropas.agregarPrenda(this.prenda);
+    fueAplicada = true;
+  }
 
+  method deshacerModificacion(){
+    this.guardaRropas.quitarPrenda(this.prenda);
+    fueAplicada = false;
+  }
 
+}
+
+class QuitarPrenda extends Modificacion {
+
+  method aplicarModificacion(){
+    this.guardaRropas.quitarPrenda(this.prenda);
+    fueAplicada = true;
+  }
+
+  method deshacerModificacion(){
+    this.guardaRropas.agregarPrenda(this.prenda);
+    fueAplicada = false;
+  }
+
+}
 
 
 
@@ -349,4 +410,5 @@ maxima de preguntas hacia la API por dia para evitar que sea tan costoso su uso.
 ACLARACIONES: (quinta iteracion)
 Teniendo en cuenta el requerimiento de que se puede separar por criterios a los guardarropas, lo que hago es solamente poner el criterio
 en la clase guardaRropas, de esta forma el usuario decide que prendas poner y que no, toda prenda que decida poner en ese guardarropas se 
-considera de ese criterio. Para lso compartidos hago una referencia al mismo objeto.
+considera de ese criterio. Para lso compartidos hago una referencia al mismo objeto. Hay una doble referencia entre modificaciones y
+guardaRropas pero en este caso la veo aceptable.
